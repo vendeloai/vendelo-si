@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101a2d">
+<meta name="description" content="VÉNDELO AI conecta necesidades de compra con productos y vendedores.">
+<link rel="manifest" href="manifest.webmanifest">
+<title>VÉNDELO AI — Comercio inteligente</title>
+<style>
+:root{--navy:#101a2d;--navy2:#1b2a43;--gold:#d3b477;--ink:#172033;--muted:#667085;--line:#e6e9ef;--bg:#f5f6f8;--white:#fff;--green:#16845b;--red:#b54747}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:650;background:var(--navy);color:#fff}button.secondary{background:#edf0f4;color:var(--ink)}button.gold{background:var(--gold);color:#172033}button:disabled{opacity:.45;cursor:not-allowed}
+header{background:var(--navy);color:#fff;padding:18px max(18px,calc((100% - 1160px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:5;box-shadow:0 5px 22px #101a2d22}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:.04em}.brandmark{width:38px;height:38px;border-radius:12px;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-size:21px}.brand small{display:block;color:var(--gold);font-size:9px;letter-spacing:.15em}
+.wrap{max-width:1160px;margin:0 auto;padding:24px 18px 70px}.hero{background:linear-gradient(120deg,#101a2d,#263a59);color:white;border-radius:22px;padding:28px;display:grid;grid-template-columns:1.4fr .8fr;gap:20px;align-items:center}.hero h1{font-size:clamp(27px,4vw,42px);line-height:1.08;margin:0 0 12px}.hero p{color:#d2dbe7;max-width:640px}.hero-card{background:#ffffff12;border:1px solid #ffffff24;border-radius:18px;padding:18px}.hero-card b{font-size:30px;color:var(--gold)}
+.nav{display:flex;gap:8px;overflow:auto;padding:18px 0}.nav button{white-space:nowrap;background:#e9edf2;color:#344054}.nav button.active{background:var(--navy);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.stat,.panel,.card{background:white;border:1px solid var(--line);border-radius:16px;padding:17px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:27px;margin-top:5px}
+.section{display:none}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+h2{font-size:21px;margin:5px 0 14px}h3{font-size:16px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{display:inline-block;background:#edf6f1;color:#16734f;border-radius:30px;padding:4px 9px;font-size:11px;font-weight:700}.price{font-size:22px;font-weight:800;margin:8px 0}.product{display:flex;flex-direction:column;gap:8px}.product .emoji{height:100px;border-radius:12px;background:linear-gradient(135deg,#edf0f4,#e1e7ef);display:grid;place-items:center;font-size:42px}
+label{display:block;font-size:13px;font-weight:700;margin:10px 0 5px}input,textarea,select{width:100%;border:1px solid #d8dde5;border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink)}textarea{min-height:90px;resize:vertical}.form-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed #cbd2dc;border-radius:14px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+.notice{background:#fff8e8;border:1px solid #f1dfb5;color:#6c5524;border-radius:12px;padding:12px;font-size:13px;margin:14px 0}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#172033;color:white;padding:12px 18px;border-radius:12px;display:none;z-index:10;box-shadow:0 6px 30px #0003}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.wrap{padding-top:14px}header{padding:13px 16px}}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.hero{padding:21px}.stats .stat{padding:13px}.stat strong{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="brandmark">V</div><div>VÉNDELO AI<small>GLOBAL COMMERCE INTELLIGENCE</small></div></div>
+ <button class="secondary" id="installBtn" hidden>Instalar app</button>
+</header>
+<main class="wrap">
+ <section class="hero">
+  <div><div class="pill">MVP · FASE 1</div><h1>El comercio comienza con una necesidad.</h1><p>Publica lo que vendes o cuéntanos qué necesitas. VÉNDELO AI ayuda a conectar oferta y demanda de forma sencilla.</p><button class="gold" data-go="radar">Encontrar productos</button></div>
+  <div class="hero-card"><div class="muted" style="color:#d2dbe7">Tu espacio comercial</div><b id="heroCount">0</b><div>productos publicados en este dispositivo</div><hr style="border-color:#ffffff22"><div class="muted" style="color:#d2dbe7">Empieza gratis · Sin comisión durante el piloto</div></div>
+ </section>
+ <div class="stats">
+  <div class="stat"><small>Productos</small><strong id="statProducts">0</strong></div>
+  <div class="stat"><small>Solicitudes</small><strong id="statNeeds">0</strong></div>
+  <div class="stat"><small>Coincidencias</small><strong id="statMatches">0</strong></div>
+  <div class="stat"><small>Intereses</small><strong id="statInterests">0</strong></div>
+ </div>
+ <nav class="nav">
+  <button class="active" data-tab="market">Explorar</button><button data-tab="sell">Publicar producto</button><button data-tab="need">Solicitar producto</button><button data-tab="radar">Radar IA</button><button data-tab="activity">Actividad</button>
+ </nav>
+ <section class="section active" id="market">
+  <div class="row"><div><h2>Explorar productos</h2><div class="muted">Catálogo de vendedores participantes.</div></div><select id="filterCategory" style="max-width:180px"><option value="">Todas las categorías</option><option>Hogar</option><option>Tecnología</option><option>Moda</option><option>Deporte</option><option>Otros</option></select></div>
+  <label for="searchProducts">Buscar</label><input id="searchProducts" placeholder="Ej. silla ergonómica, bicicleta, bolso...">
+  <div class="grid" id="productList" style="margin-top:15px"></div>
+ </section>
+ <section class="section" id="sell">
+  <div class="panel"><h2>Publica tu producto</h2><p class="muted">Completa los datos para añadirlo al catálogo de este dispositivo.</p>
+   <form id="productForm">
+    <label>Nombre del producto *</label><input name="name" required maxlength="90" placeholder="Ej. Silla ergonómica">
+    <div class="two"><div><label>Precio *</label><input name="price" required type="number" min="1" step="0.01" placeholder="150000"></div><div><label>Moneda</label><select name="currency"><option>COP</option><option>USD</option><option>MXN</option></select></div></div>
+    <div class="two"><div><label>Categoría</label><select name="category"><option>Hogar</option><option>Tecnología</option><option>Moda</option><option>Deporte</option><option>Otros</option></select></div><div><label>Ciudad / país</label><input name="location" placeholder="Bogotá, Colombia"></div></div>
+    <label>Descripción *</label><textarea name="description" required maxlength="600" placeholder="Describe estado, medidas, materiales, características y entrega."></textarea>
+    <label>Nombre del vendedor o tienda *</label><input name="seller" required maxlength="80" placeholder="Tu nombre o negocio">
+    <label>Contacto (correo o WhatsApp) *</label><input name="contact" required maxlength="100" placeholder="Datos para que te contacten">
+    <div class="form-actions"><button type="submit">Publicar producto</button><button type="reset" class="secondary">Limpiar</button></div>
+   </form>
+  </div>
+ </section>
+ <section class="section" id="need">
+  <div class="panel"><h2>¿Qué estás buscando?</h2><p class="muted">Publica una solicitud para que vendedores con productos compatibles puedan encontrarte.</p>
+   <form id="needForm">
+    <label>¿Qué necesitas? *</label><input name="title" required maxlength="100" placeholder="Ej. Busco escritorio para home office">
+    <label>Detalles y características</label><textarea name="details" maxlength="500" placeholder="Tamaño, marca, color, estado, requisitos..."></textarea>
+    <div class="two"><div><label>Presupuesto máximo</label><input name="budget" type="number" min="0" placeholder="300000"></div><div><label>Moneda</label><select name="currency"><option>COP</option><option>USD</option><option>MXN</option></select></div></div>
+    <div class="two"><div><label>Ubicación</label><input name="location" placeholder="Ciudad, país"></div><div><label>Contacto</label><input name="contact" required placeholder="Correo o WhatsApp"></div></div>
+    <div class="form-actions"><button type="submit">Publicar solicitud</button></div>
+   </form>
+  </div>
+ </section>
+ <section class="section" id="radar">
+  <h2>Radar de oportunidades</h2><p class="muted">Coincidencias demostrativas entre solicitudes y productos registrados.</p>
+  <div id="matchList"></div>
+  <div class="notice">El radar de esta primera versión utiliza coincidencia por palabras y categoría. No es todavía un modelo de inteligencia artificial entrenado.</div>
+ </section>
+ <section class="section" id="activity">
+  <h2>Actividad e intereses</h2><div id="activityList"></div>
+  <div class="notice">Los datos se guardan en el almacenamiento de este navegador. En esta etapa no están sincronizados entre diferentes dispositivos ni usuarios.</div>
+  <div class="panel"><h3>Respaldo de datos</h3><p class="muted">Descarga una copia de tus productos, solicitudes e intereses para conservarla.</p><div class="form-actions"><button id="exportBtn">Exportar respaldo JSON</button><label class="secondary" style="padding:11px 14px;border-radius:12px;cursor:pointer"><input type="file" id="importFile" accept="application/json" hidden>Importar respaldo</label></div></div>
+ </section>
+ <footer>VÉNDELO AI · Prototipo MVP · Comercio sin fronteras</footer>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const DB='vendelo-ai-v1';
+let data={products:[],needs:[],interests:[]};
+let deferredPrompt=null;
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+function toast(msg){const t=$('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2600)}
+function save(){localStorage.setItem(DB,JSON.stringify(data));render()}
+function load(){try{const d=JSON.parse(localStorage.getItem(DB)||'{}');data={products:d.products||[],needs:d.needs||[],interests:d.interests||[]}}catch(e){data={products:[],needs:[],interests:[]}}render()}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n,c){return new Intl.NumberFormat('es-CO',{style:'currency',currency:c||'COP',maximumFractionDigits:0}).format(Number(n)||0)}
+function go(tab){$$('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$$('.section').forEach(s=>s.classList.toggle('active',s.id===tab));if(tab==='radar')renderMatches();if(tab==='activity')renderActivity();window.scrollTo({top:0,behavior:'smooth'})}
+$$('.nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.tab)));
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+function render(){
+ $('#statProducts').textContent=data.products.length;$('#heroCount').textContent=data.products.length;
+ $('#statNeeds').textContent=data.needs.length;$('#statInterests').textContent=data.interests.length;
+ $('#statMatches').textContent=countMatches();
+ const q=$('#searchProducts').value.toLowerCase(),cat=$('#filterCategory').value;
+ const list=data.products.filter(p=>(!cat||p.category===cat)&&(!q||(p.name+' '+p.description+' '+p.category+' '+p.location).toLowerCase().includes(q)));
+ $('#productList').innerHTML=list.length?list.map(p=>`<article class="card product"><div class="emoji">${emoji(p.category)}</div><div class="row"><span class="pill">${esc(p.category)}</span><span class="muted">${esc(p.location||'Ubicación no indicada')}</span></div><h3>${esc(p.name)}</h3><div class="price">${money(p.price,p.currency)}</div><div class="muted">${esc(p.description)}</div><div class="muted">Vende: ${esc(p.seller)}</div><button data-interest="${p.id}">Me interesa</button></article>`).join(''):'<div class="empty" style="grid-column:1/-1">Todavía no hay productos. ¡Sé el primero en publicar!</div>';
+ $$('[data-interest]').forEach(b=>b.onclick=()=>interest(b.dataset.interest));
+}
+function emoji(c){return ({Hogar:'🪑',Tecnología:'💻',Moda:'👜',Deporte:'🚴',Otros:'📦'})[c]||'📦'}
+function countMatches(){return data.needs.reduce((n,r)=>n+data.products.filter(p=>matches(p,r)).length,0)}
+function tokens(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(/[^a-z0-9]+/).filter(w=>w.length>3)}
+function matches(p,r){const a=tokens(p.name+' '+p.description+' '+p.category),b=tokens(r.title+' '+r.details);const score=b.filter(w=>a.includes(w)).length;const budget=!r.budget||Number(p.price)<=Number(r.budget);const currency=!r.currency||p.currency===r.currency;return score>=1&&budget&&currency}
+function renderMatches(){
+ const arr=[];data.needs.forEach(r=>data.products.filter(p=>matches(p,r)).forEach(p=>arr.push({r,p})));
+ $('#matchList').innerHTML=arr.length?arr.map(({r,p})=>`<div class="panel" style="margin-bottom:12px"><div class="row"><span class="pill">Coincidencia por reglas</span><span class="muted">${esc(r.location||'')}</span></div><h3 style="margin-top:10px">${esc(p.name)}</h3><p class="muted">Solicitud: ${esc(r.title)}</p><div class="price">${money(p.price,p.currency)}</div><p>${esc(p.description)}</p><button data-match="${p.id}" data-need="${r.id}">Contactar / mostrar interés</button></div>`).join(''):'<div class="empty">Aún no hay coincidencias. Publica productos y solicitudes con descripciones detalladas.</div>';
+ $$('[data-match]').forEach(b=>b.onclick=()=>interest(b.dataset.match,b.dataset.need));
+}
+function interest(id,needId=null){const p=data.products.find(x=>x.id===id);if(!p)return;data.interests.unshift({id:crypto.randomUUID(),productId:id,needId,product:p.name,at:new Date().toISOString()});save();toast('Interés registrado. Contacta al vendedor: '+p.contact)}
+function renderActivity(){
+ const items=data.interests.map(i=>`<div class="panel" style="margin-bottom:9px"><b>Interés en: ${esc(i.product)}</b><div class="muted">${new Date(i.at).toLocaleString('es-CO')}</div></div>`).join('');
+ $('#activityList').innerHTML=items||'<div class="empty">Todavía no tienes actividad registrada.</div>';
+}
+$('#productForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);const p=Object.fromEntries(f.entries());p.id=crypto.randomUUID();p.price=Number(p.price);p.createdAt=new Date().toISOString();data.products.unshift(p);save();e.target.reset();go('market');toast('Producto publicado en este dispositivo.')});
+$('#needForm').addEventListener('submit',e=>{e.preventDefault();const r=Object.fromEntries(new FormData(e.target).entries());r.id=crypto.randomUUID();r.budget=Number(r.budget)||0;r.createdAt=new Date().toISOString();data.needs.unshift(r);save();e.target.reset();go('radar');toast('Solicitud publicada. Revisando coincidencias.')});
+$('#searchProducts').addEventListener('input',render);$('#filterCategory').addEventListener('change',render);
+$('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='vendelo-ai-respaldo.json';a.click();URL.revokeObjectURL(a.href)};
+$('#importFile').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;const d=JSON.parse(await f.text());if(!Array.isArray(d.products)||!Array.isArray(d.needs)||!Array.isArray(d.interests))throw Error();data=d;save();toast('Respaldo importado correctamente.')}catch(err){toast('No se pudo importar el archivo.')}e.target.value=''};
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('#installBtn').hidden=false});
+$('#installBtn').onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();deferredPrompt=null;$('#installBtn').hidden=true};
+if('serviceWorker'in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+load();
+</script>
+</body></html>
